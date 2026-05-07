@@ -23,8 +23,24 @@ connectDB();
 
 // ─── Security Middleware ─────────────────────────────────────────────────────
 app.use(helmet());
+
+// Dynamic CORS configuration for multiple environments
+const allowedOrigins = [
+  'http://localhost:3000',           // Local development
+  process.env.CLIENT_URL,             // Production frontend URL
+].filter(Boolean); // Remove undefined values
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true,
 }));
 
@@ -48,14 +64,26 @@ app.use(globalLimiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// ─── Logging (development only) ──────────────────────────────────────────────
+// ─── Logging ──────────────────────────────────────────────────────────────
+// Only use morgan in development, but add simple logging in production
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
+} else {
+  // Simple request logging for production
+  app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path} - ${new Date().toISOString()}`);
+    next();
+  });
 }
 
 // ─── Health Check ────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Agri-Connect API is running', timestamp: new Date() });
+  res.json({ 
+    status: 'ok', 
+    message: 'Agri-Connect API is running', 
+    timestamp: new Date(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 // ─── Routes ──────────────────────────────────────────────────────────────────
