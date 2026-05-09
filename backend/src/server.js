@@ -53,9 +53,10 @@ const globalLimiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5, // Only 5 login attempts per 15 min (as per NFR4.3)
+  max: process.env.NODE_ENV === 'development' ? 100 : 5, // relaxed in dev
   message: { error: 'Too many login attempts. Please wait 15 minutes.' },
   skipSuccessfulRequests: true,
+  skip: (req) => req.method === 'OPTIONS', // never block preflight
 });
 
 app.use(globalLimiter);
