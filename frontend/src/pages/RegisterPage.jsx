@@ -32,7 +32,12 @@ export default function RegisterPage() {
     return () => dispatch(clearError());
   }, [isAuthenticated, navigate, dispatch]);
 
-  const set = (field, value) => setForm(f => ({ ...f, [field]: value }));
+  // FIX #3: Clear Redux error when user edits any field
+  const set = (field, value) => {
+    if (error) dispatch(clearError());
+    if (field === 'state') setForm(f => ({ ...f, state: value, lga: '' })); // reset LGA on state change
+    else setForm(f => ({ ...f, [field]: value }));
+  };
 
   const validateStep1 = () => {
     if (!form.fullName.trim()) return 'Full name is required';
@@ -44,12 +49,13 @@ export default function RegisterPage() {
 
   const validateStep2 = () => {
     if (!form.state) return 'Please select your state';
+    if (!form.lga) return 'Please select your LGA';  // FIX #6
     if (!form.primarySpecialization) return 'Please select your farming type';
     return '';
   };
 
   const nextStep = () => {
-    const err = step === 1 ? validateStep1() : '';
+    const err = validateStep1();
     if (err) { setValidationError(err); return; }
     setValidationError('');
     setStep(s => s + 1);
@@ -62,7 +68,8 @@ export default function RegisterPage() {
     dispatch(registerUser(form));
   };
 
-  const progressPct = (step / 2) * 100;
+  // FIX #2: Progress starts at 0%, reaches 50% at step 2
+  const progressPct = ((step - 1) / 2) * 100;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-800 to-primary-600 flex items-center justify-center p-4">
@@ -81,6 +88,7 @@ export default function RegisterPage() {
               <span className={step >= 2 ? 'text-primary-600 font-medium' : ''}>2. Farming Profile</span>
             </div>
             <div className="h-2 bg-gray-100 rounded-full">
+              {/* FIX #2: now uses corrected progressPct */}
               <div className="h-2 bg-primary-500 rounded-full transition-all duration-300" style={{ width: `${progressPct}%` }} />
             </div>
           </div>
@@ -106,12 +114,16 @@ export default function RegisterPage() {
               </div>
               <div>
                 <label className="label">Password</label>
+                {/* FIX #5: added autoComplete */}
                 <input className="input" type="password" placeholder="Min. 8 characters" value={form.password}
+                  autoComplete="new-password"
                   onChange={e => set('password', e.target.value)} />
               </div>
               <div>
                 <label className="label">Confirm Password</label>
+                {/* FIX #5: added autoComplete */}
                 <input className="input" type="password" placeholder="Re-enter password" value={form.confirmPassword}
+                  autoComplete="new-password"
                   onChange={e => set('confirmPassword', e.target.value)} />
               </div>
               <button onClick={nextStep} className="btn-primary w-full py-3 text-base mt-2">
@@ -143,6 +155,19 @@ export default function RegisterPage() {
                 </div>
               </div>
 
+              {/* FIX #6: LGA field — only shows after a state is selected */}
+              {form.state && (
+                <div>
+                  <label className="label">Local Government Area (LGA)</label>
+                  <input
+                    className="input"
+                    placeholder="e.g. Ikorodu"
+                    value={form.lga}
+                    onChange={e => set('lga', e.target.value)}
+                  />
+                </div>
+              )}
+
               <div>
                 <label className="label">Primary Farming Type</label>
                 <div className="grid grid-cols-1 gap-2 mt-1">
@@ -168,10 +193,11 @@ export default function RegisterPage() {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <button onClick={() => setStep(1)} className="btn-secondary flex-1 py-2.5">
+                <button onClick={() => { setStep(1); setValidationError(''); }} className="btn-secondary flex-1 py-2.5">
                   ← Back
                 </button>
-                <button onClick={handleSubmit} disabled={isLoading} className="btn-primary flex-2 flex-1 py-2.5">
+                {/* FIX #4: removed invalid flex-2 class */}
+                <button onClick={handleSubmit} disabled={isLoading} className="btn-primary flex-1 py-2.5">
                   {isLoading ? 'Creating account…' : 'Create Account'}
                 </button>
               </div>
