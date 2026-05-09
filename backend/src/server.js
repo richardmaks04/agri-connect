@@ -26,8 +26,9 @@ app.use(helmet());
 
 // Dynamic CORS configuration for multiple environments
 const allowedOrigins = [
-  'http://localhost:3000',           // Local development
-  process.env.CLIENT_URL,             // Production frontend URL
+  'http://localhost:3000',
+  'https://agri-connect-version4.vercel.app/',
+  process.env.CLIENT_URL,
 ].filter(Boolean); // Remove undefined values
 
 app.use(cors({
