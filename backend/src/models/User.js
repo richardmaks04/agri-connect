@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     fullName: { type: String, required: true, trim: true },
     preferredLanguage: { type: String, enum: ['en', 'yo', 'ha', 'ig'], default: 'en' },
     avatar: { type: String, default: '' },
-    bio: { type: String, maxlength: 500 },
+    bio: { type: String, max_length: 500 },
     location: {
       state: String,
       lga: String,
@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
         lng: Number,
       },
     },
-    // Core to personalisation — what the farmer grows/raises
+    // Core to personalization — what the farmer grows/raises
     farmingSpecializations: [{
       primary: {
         type: String,

@@ -27,7 +27,7 @@ app.use(helmet());
 // Dynamic CORS configuration for multiple environments
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://agri-connect-version4.vercel.app',  // your exact Vercel URL
+  'https://agri-connect-y6ti.vercel.app/',  // your exact Vercel URL
   process.env.CLIENT_URL,
 ].filter(Boolean); // Remove undefined values
 
@@ -112,4 +112,15 @@ app.listen(PORT, () => {
   console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
 });
 
+// Keep-alive ping for Render free tier
+const BACKEND_URL = process.env.RENDER_EXTERNAL_URL || 'https://agri-connect-yrkl.onrender.com';
+setInterval(() => {
+  fetch(`${BACKEND_URL}/api/health`)
+    .then(() => console.log('Keep-alive ping sent'))
+    .catch(err => console.error('Keep-alive failed:', err));
+}, 14 * 60 * 1000); // every 14 minutes
+
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 module.exports = app;
