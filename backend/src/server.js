@@ -27,7 +27,7 @@ app.use(helmet());
 // Dynamic CORS configuration for multiple environments
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://agri-connect-y6ti.vercel.app/',  // your exact Vercel URL
+  'https://agri-connect-y6ti.vercel.app',  // your exact Vercel URL
   process.env.CLIENT_URL,
 ].filter(Boolean); // Remove undefined values
 
@@ -120,7 +120,4 @@ setInterval(() => {
     .catch(err => console.error('Keep-alive failed:', err));
 }, 14 * 60 * 1000); // every 14 minutes
 
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
 module.exports = app;
