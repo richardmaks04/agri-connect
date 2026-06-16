@@ -53,7 +53,12 @@ const authSlice = createSlice({
   },
   reducers: {
     clearError: (state) => { state.error = null; },
+    setInitialised: (state) => {          // ← ADD THIS
+      state.isInitialised = true;
+      state.isAuthenticated = false;
+    },
   },
+  
   extraReducers: (builder) => {
     // Login
     builder.addCase(loginUser.pending, (state) => { state.isLoading = true; state.error = null; });
@@ -97,5 +102,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, setInitialised } = authSlice.actions;
 export default authSlice.reducer;

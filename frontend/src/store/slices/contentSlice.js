@@ -64,6 +64,18 @@ const contentSlice = createSlice({
       state.isLoading = false;
       state.currentArticle = action.payload;
     });
+    builder.addCase(saveContent.fulfilled, (state, action) => {
+      // Optionally update feed item save count
+      const item = state.feed.find(f => f._id === action.payload.id);
+      if (item) {
+        if (action.payload.saved) item.statistics.saves += 1;
+        else if (item.statistics.saves > 0) item.statistics.saves -= 1;
+      }
+      if (state.currentArticle?._id === action.payload.id) {
+        if (action.payload.saved) state.currentArticle.statistics.saves += 1;
+        else if (state.currentArticle.statistics.saves > 0) state.currentArticle.statistics.saves -= 1;
+      }
+    });
     builder.addCase(fetchArticle.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;

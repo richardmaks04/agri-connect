@@ -23,6 +23,7 @@ import SearchPage       from './components/search/SearchPage';
 import ProfilePage      from './components/auth/ProfilePage';
 import AdminDashboard   from './components/admin/AdminDashboard';
 
+import { setInitialised } from './store/slices/authSlice';
 // Layout wrapper for authenticated pages (includes Navbar + offline banner)
 function AppLayout({ children }) {
   return (
@@ -46,7 +47,8 @@ export default function App() {
     if (token) dispatch(fetchCurrentUser());
     else {
       // No token — mark as initialised so ProtectedRoute can redirect
-      dispatch({ type: 'auth/fetchMe/rejected' });
+        dispatch(setInitialised());
+      
     }
 
     // Init offline queue replay when connectivity returns
@@ -67,15 +69,15 @@ export default function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/content/:id" element={
-          <ProtectedRoute>
-            <AppLayout><ArticleViewer /></AppLayout>
-          </ProtectedRoute>
-        } />
-
         <Route path="/content/new" element={
           <ProtectedRoute roles={['expert', 'extension', 'admin']}>
             <AppLayout><CreateContent /></AppLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/content/:id" element={
+          <ProtectedRoute>
+            <AppLayout><ArticleViewer /></AppLayout>
           </ProtectedRoute>
         } />
 
