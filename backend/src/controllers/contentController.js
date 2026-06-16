@@ -35,17 +35,14 @@ exports.getOne = async (req, res, next) => {
       return res.status(404).json({ error: 'Content not found.' });
     }
 
-    // Increment view count
     content.statistics.views += 1;
     await content.save();
 
-    // Log interaction in user history for personalisation
     if (req.user) {
       await User.findByIdAndUpdate(req.user._id, {
-        // ✅ CORRECT
         $push: {
           'statistics.interactionHistory': {
-            $each: [{ contentId: content._id, action: 'view' }],
+            $each: [{ contentId: content._id, action: 'view', timestamp: new Date() }],
             $slice: -100,
           },
         },
@@ -109,13 +106,25 @@ exports.saveContent = async (req, res, next) => {
     } else {
       user.statistics.contentSaved.push(content._id);
       content.statistics.saves += 1;
+
+      // FIX: Include timestamp so Mongoose schema default isn't relied upon
+      // (defaults don't always fire inside $push operations)
       await User.findByIdAndUpdate(req.user._id, {
-        $push: { 'statistics.interactionHistory': { contentId: content._id, action: 'save' } },
+        $push: {
+          'statistics.interactionHistory': {
+            contentId: content._id,
+            action: 'save',
+            timestamp: new Date(),
+          },
+        },
       });
     }
 
     await Promise.all([user.save(), content.save()]);
-    res.json({ saved: !alreadySaved, message: alreadySaved ? 'Removed from saved.' : 'Saved for offline reading.' });
+    res.json({
+      saved: !alreadySaved,
+      message: alreadySaved ? 'Removed from saved.' : 'Saved for offline reading.',
+    });
   } catch (error) {
     next(error);
   }
@@ -130,8 +139,15 @@ exports.likeContent = async (req, res, next) => {
     content.statistics.likes += 1;
     await content.save();
 
+    // FIX: Include timestamp explicitly
     await User.findByIdAndUpdate(req.user._id, {
-      $push: { 'statistics.interactionHistory': { contentId: content._id, action: 'like' } },
+      $push: {
+        'statistics.interactionHistory': {
+          contentId: content._id,
+          action: 'like',
+          timestamp: new Date(),
+        },
+      },
     });
 
     res.json({ likes: content.statistics.likes });

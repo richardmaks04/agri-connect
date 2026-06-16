@@ -24,19 +24,22 @@ connectDB();
 // ─── Security Middleware ─────────────────────────────────────────────────────
 app.use(helmet());
 
-// Dynamic CORS configuration for multiple environments
+// FIX: Strip trailing slashes from CLIENT_URL before adding to allowedOrigins
+// to prevent CORS mismatches (e.g. "https://example.com/" vs "https://example.com")
+const normalizeOrigin = (url) => url && url.replace(/\/$/, '');
+
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://agri-connect-y6ti.vercel.app',  // your exact Vercel URL
-  process.env.CLIENT_URL,
-].filter(Boolean); // Remove undefined values
+  'https://agri-connect-y6ti.vercel.app',
+  normalizeOrigin(process.env.CLIENT_URL),
+].filter(Boolean);
 
 app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, etc.)
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, Postman, etc.)
     if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) === -1) {
+
+    if (!allowedOrigins.includes(origin)) {
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
     }
@@ -47,17 +50,17 @@ app.use(cors({
 
 // ─── Rate Limiting ───────────────────────────────────────────────────────────
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 200,
   message: { error: 'Too many requests, please try again later.' },
 });
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'development' ? 100 : 5, // relaxed in dev
+  max: process.env.NODE_ENV === 'development' ? 100 : 5,
   message: { error: 'Too many login attempts. Please wait 15 minutes.' },
   skipSuccessfulRequests: true,
-  skip: (req) => req.method === 'OPTIONS', // never block preflight
+  skip: (req) => req.method === 'OPTIONS',
 });
 
 app.use(globalLimiter);
@@ -66,25 +69,23 @@ app.use(globalLimiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// ─── Logging ──────────────────────────────────────────────────────────────
-// Only use morgan in development, but add simple logging in production
+// ─── Logging ─────────────────────────────────────────────────────────────────
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 } else {
-  // Simple request logging for production
   app.use((req, res, next) => {
     console.log(`${req.method} ${req.path} - ${new Date().toISOString()}`);
     next();
   });
 }
 
-// ─── Health Check ────────────────────────────────────────────────────────────
+// ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    message: 'Agri-Connect API is running', 
+  res.json({
+    status: 'ok',
+    message: 'Agri-Connect API is running',
     timestamp: new Date(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
   });
 });
 
@@ -109,15 +110,29 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`\n🌾 Agri-Connect API running on port ${PORT}`);
   console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`   Allowed origins: ${allowedOrigins.join(', ')}`);
   console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
 });
 
-// Keep-alive ping for Render free tier
-const BACKEND_URL = process.env.RENDER_EXTERNAL_URL || 'https://agri-connect-yrkl.onrender.com';
-setInterval(() => {
-  fetch(`${BACKEND_URL}/api/health`)
-    .then(() => console.log('Keep-alive ping sent'))
-    .catch(err => console.error('Keep-alive failed:', err));
-}, 14 * 60 * 1000); // every 14 minutes
+// ─── Keep-alive ping for Render free tier ────────────────────────────────────
+// FIX: Only run in production, and guard against missing global fetch
+// (Node < 18 doesn't have fetch built-in — use node-fetch or upgrade Node)
+if (process.env.NODE_ENV === 'production') {
+  const BACKEND_URL =
+    process.env.RENDER_EXTERNAL_URL || 'https://agri-connect-yrkl.onrender.com';
+
+  const pingHealth = () => {
+    // Guard: global fetch available in Node 18+
+    if (typeof fetch !== 'function') {
+      console.warn('Keep-alive: fetch not available. Upgrade to Node 18+ or install node-fetch.');
+      return;
+    }
+    fetch(`${BACKEND_URL}/api/health`)
+      .then(() => console.log('Keep-alive ping sent'))
+      .catch((err) => console.error('Keep-alive failed:', err.message));
+  };
+
+  setInterval(pingHealth, 14 * 60 * 1000); // every 14 minutes
+}
 
 module.exports = app;

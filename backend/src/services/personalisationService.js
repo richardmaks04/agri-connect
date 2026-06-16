@@ -18,20 +18,18 @@ const WEIGHTS = {
   delta: 0.15,  // Recency
 };
 
-const RECENCY_LAMBDA = 0.1; // Controls how fast recency score decays
+const RECENCY_LAMBDA = 0.1;
 
 /**
  * S_spec: Specialisation Match Score
- * 1.0 = content matches user's primary specialization
- * 0.6 = content matches a secondary specialization
- * 0.0 = no match
+ * 1.0 = primary match | 0.6 = secondary match | 0.5 = cold start | 0.0 = no match
  */
 function computeSpecScore(content, user) {
   const userSpecs = user.profile?.farmingSpecializations || [];
-  if (userSpecs.length === 0) return 0.5; // Cold start: neutral score
+  if (userSpecs.length === 0) return 0.5;
 
   const contentSpecs = content.metadata?.farmingSpecializations || [];
-  if (contentSpecs.includes('general')) return 0.5; // General content gets neutral score
+  if (contentSpecs.includes('general')) return 0.5;
 
   for (const userSpec of userSpecs) {
     if (contentSpecs.includes(userSpec.primary)) return 1.0;
@@ -43,8 +41,8 @@ function computeSpecScore(content, user) {
 
 /**
  * S_collab: Collaborative Filtering Score
- * Measures engagement from users with the same primary specialisation.
- * Falls back to 0 if fewer than 10 similar users exist.
+ * Engagement from users with the same primary specialisation.
+ * Falls back to 0 if fewer than 10 similar users exist (cold start).
  */
 async function computeCollabScore(content, user) {
   try {
@@ -56,15 +54,18 @@ async function computeCollabScore(content, user) {
       _id: { $ne: user._id },
     });
 
-    if (similarUserCount < 10) return 0; // Not enough data — cold start fallback
+    if (similarUserCount < 10) return 0;
 
-    // Count how many similar users saved or liked this content
     const engagedCount = await User.countDocuments({
       'profile.farmingSpecializations.primary': userPrimary,
       _id: { $ne: user._id },
       $or: [
         { 'statistics.contentSaved': content._id },
-        { 'statistics.interactionHistory': { $elemMatch: { contentId: content._id, action: { $in: ['like', 'save'] } } } },
+        {
+          'statistics.interactionHistory': {
+            $elemMatch: { contentId: content._id, action: { $in: ['like', 'save'] } },
+          },
+        },
       ],
     });
 
@@ -76,82 +77,96 @@ async function computeCollabScore(content, user) {
 
 /**
  * S_content: Content-Based Score
- * Cosine similarity between content tags and user's historical engagement tags.
+ *
+ * FIX: The original implementation tried to access `contentId.metadata` inside
+ * interactionHistory, but `contentId` is a plain ObjectId (not populated) when
+ * the user document is fetched normally. This meant the tag-frequency map was
+ * always empty and the function always returned 0.
+ *
+ * Solution: Batch-fetch the content documents for the user's recent interactions
+ * once, build the tag-frequency map from those documents, then compute the
+ * dot-product similarity. This is more accurate and actually works.
  */
-function computeContentScore(content, user) {
+async function computeContentScore(content, user) {
   const history = user.statistics?.interactionHistory || [];
   if (history.length === 0) return 0;
 
+  const recentHistory = history.slice(-50);
+  const recentIds = recentHistory.map(h => h.contentId).filter(Boolean);
+
+  if (recentIds.length === 0) return 0;
+
+  // Fetch the actual content documents so we can read their metadata/tags
+  const historicContent = await Content.find(
+    { _id: { $in: recentIds } },
+    { 'metadata.farmingSpecializations': 1, 'metadata.crops': 1, 'metadata.topics': 1 }
+  ).lean();
+
+  // Build a tag-frequency map from the user's history
+  const tagFrequency = {};
+  let totalTagCount = 0;
+
+  for (const hc of historicContent) {
+    const tags = [
+      ...(hc.metadata?.farmingSpecializations || []),
+      ...(hc.metadata?.crops || []),
+      ...(hc.metadata?.topics || []),
+    ];
+    for (const tag of tags) {
+      tagFrequency[tag] = (tagFrequency[tag] || 0) + 1;
+      totalTagCount++;
+    }
+  }
+
+  if (totalTagCount === 0) return 0;
+
+  // Tags from the candidate content item
   const contentTags = new Set([
     ...(content.metadata?.farmingSpecializations || []),
     ...(content.metadata?.crops || []),
     ...(content.metadata?.topics || []),
   ]);
 
-  // Build a tag frequency map from user's history (simplified cosine similarity)
-  const recentHistory = history.slice(-50); // Only use last 50 interactions
-  const tagFrequency = {};
-  let totalTagCount = 0;
-
-  recentHistory.forEach(({ contentId }) => {
-    // Note: In production, you'd populate contentId; here we use tags if available
-    if (contentId && contentId.metadata) {
-      const tags = [
-        ...(contentId.metadata.farmingSpecializations || []),
-        ...(contentId.metadata.crops || []),
-        ...(contentId.metadata.topics || []),
-      ];
-      tags.forEach(tag => {
-        tagFrequency[tag] = (tagFrequency[tag] || 0) + 1;
-        totalTagCount++;
-      });
-    }
-  });
-
-  if (totalTagCount === 0) return 0;
-
-  // Dot product of content tags and user history tags
+  // Dot product (simplified cosine similarity — denominator normalised by totalTagCount)
   let dotProduct = 0;
-  contentTags.forEach(tag => {
+  for (const tag of contentTags) {
     dotProduct += (tagFrequency[tag] || 0) / totalTagCount;
-  });
+  }
 
   return Math.min(dotProduct, 1.0);
 }
 
 /**
- * R_recency: Recency Weight
- * Exponential decay: newer content scores higher.
+ * R_recency: Exponential decay — newer content scores higher.
  * exp(-λ × days_since_published)
  */
 function computeRecencyScore(content) {
   if (!content.publishedAt) return 0.5;
-  const daysSincePublished = (Date.now() - new Date(content.publishedAt)) / (1000 * 60 * 60 * 24);
+  const daysSincePublished =
+    (Date.now() - new Date(content.publishedAt)) / (1000 * 60 * 60 * 24);
   return Math.exp(-RECENCY_LAMBDA * daysSincePublished);
 }
 
 /**
- * isNewUser: Returns true if user has fewer than 5 interactions
- * Cold-start users get alpha=1.0 (pure specialization matching)
+ * isNewUser: Cold-start detection — fewer than 5 interactions.
  */
 function isNewUser(user) {
   return (user.statistics?.interactionHistory?.length || 0) < 5;
 }
 
 /**
- * scoreContent: Compute final weighted score for one content item
+ * scoreContent: Compute final weighted score for one content item.
  */
 async function scoreContent(content, user) {
   const specScore = computeSpecScore(content, user);
 
   if (isNewUser(user)) {
-    // Cold start: pure specialisation match
-    return specScore;
+    return specScore; // Cold start: pure specialisation match
   }
 
   const [collabScore, contentScore, recencyScore] = await Promise.all([
     computeCollabScore(content, user),
-    Promise.resolve(computeContentScore(content, user)),
+    computeContentScore(content, user),
     Promise.resolve(computeRecencyScore(content)),
   ]);
 
@@ -164,20 +179,18 @@ async function scoreContent(content, user) {
 }
 
 /**
- * getPersonalisedFeed: Main function — returns sorted, scored content for a user
- * @param {Object} user - The logged-in user document
- * @param {number} limit - How many items to return
- * @param {number} skip - Pagination offset
+ * getPersonalisedFeed: Returns sorted, scored content for a user.
+ * @param {Object} user  - The logged-in user document
+ * @param {number} limit - Items to return
+ * @param {number} skip  - Pagination offset
  */
 async function getPersonalisedFeed(user, limit = 20, skip = 0) {
   try {
-    // Fetch a candidate pool of recent published content
     const candidatePool = await Content.find({ status: 'published' })
       .sort({ publishedAt: -1 })
-      .limit(100) // Score top 100 candidates, then return best `limit`
+      .limit(100)
       .lean();
 
-    // Score all candidates concurrently
     const scored = await Promise.all(
       candidatePool.map(async (content) => ({
         content,
@@ -185,13 +198,11 @@ async function getPersonalisedFeed(user, limit = 20, skip = 0) {
       }))
     );
 
-    // Sort by score descending
     scored.sort((a, b) => b.score - a.score);
 
-    // Apply pagination and return
     return scored.slice(skip, skip + limit).map(({ content, score }) => ({
       ...content,
-      _relevanceScore: Math.round(score * 100) / 100, // Rounded for readability
+      _relevanceScore: Math.round(score * 100) / 100,
     }));
   } catch (error) {
     console.error('Personalisation engine error:', error);
