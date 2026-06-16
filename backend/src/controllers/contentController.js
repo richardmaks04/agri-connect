@@ -42,11 +42,11 @@ exports.getOne = async (req, res, next) => {
     // Log interaction in user history for personalisation
     if (req.user) {
       await User.findByIdAndUpdate(req.user._id, {
+        // ✅ CORRECT
         $push: {
           'statistics.interactionHistory': {
-            contentId: content._id,
-            action: 'view',
-            $slice: -100, // Keep only last 100 interactions
+            $each: [{ contentId: content._id, action: 'view' }],
+            $slice: -100,
           },
         },
       });
