@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = 'https://agri-connect-yrkl.onrender.com/api';
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: 'https://agri-connect-yrkl.onrender.com/api',
   headers: { 'Content-Type': 'application/json' },
   timeout: 15000,
 });
