@@ -179,7 +179,6 @@ adminRouter.put('/users/:id/suspend', async (req, res, next) => {
 });
 
 module.exports = {
-  authRoutes:      require('./auth'),
   contentRoutes:   contentRouter,
   communityRoutes: communityRouter,
   searchRoutes:    searchRouter,
