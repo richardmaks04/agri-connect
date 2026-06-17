@@ -19,6 +19,14 @@ const STATIC_ASSETS = [
   '/manifest.json',
 ];
 
+// Path prefixes that should always be treated as dynamic/API traffic,
+// even though they don't live under /api (e.g. auth routes).
+const DYNAMIC_PATH_PREFIXES = ['/api', '/auth'];
+
+function isDynamicPath(pathname) {
+  return DYNAMIC_PATH_PREFIXES.some(prefix => pathname.startsWith(prefix));
+}
+
 // ─── Install: pre-cache static shell ─────────────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -54,11 +62,16 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Don't intercept non-GET API mutations — they go to sync queue instead
-  if (url.pathname.startsWith('/api') && request.method !== 'GET') return;
+  // Always let non-GET requests go straight to the network, regardless of
+  // path. This covers /api/* mutations AND routes outside /api (e.g.
+  // /auth/register, /auth/login) that should never be served from cache.
+  if (request.method !== 'GET') {
+    event.respondWith(fetch(request));
+    return;
+  }
 
-  // API GET requests: network-first, fall back to cache
-  if (url.pathname.startsWith('/api')) {
+  // Dynamic GET requests (API or auth): network-first, fall back to cache
+  if (isDynamicPath(url.pathname)) {
     event.respondWith(networkFirstStrategy(request));
     return;
   }
