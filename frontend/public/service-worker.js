@@ -141,8 +141,8 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     self.registration.showNotification(data.title || 'Agri-Connect', {
       body: data.body || 'You have a new notification',
-      icon: '/logo192.png',
-      badge: '/logo192.png',
+      icon: '/logo192.svg',
+      badge: '/logo192.svg',
       data: { url: data.url || '/' },
       actions: [
         { action: 'open', title: 'View' },
