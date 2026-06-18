@@ -62,6 +62,13 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Only intercept same-origin requests. Cross-origin API calls, such as
+  // production pages accidentally pointing to localhost, should be handled
+  // by the browser directly and not by the service worker.
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
   // Always let non-GET requests go straight to the network, regardless of
   // path. This covers /api/* mutations AND routes outside /api (e.g.
   // /auth/register, /auth/login) that should never be served from cache.
