@@ -6,8 +6,8 @@
    - Background sync queue for offline user actions
    ============================================================ */
 
-const CACHE_NAME = 'agri-connect-v1';
-const API_CACHE  = 'agri-connect-api-v1';
+const CACHE_NAME = 'agri-connect-v2';
+const API_CACHE  = 'agri-connect-api-v2';
 const QUEUE_NAME = 'agri-connect-sync-queue';
 
 // Static assets to cache immediately on install
