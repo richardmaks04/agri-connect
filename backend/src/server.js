@@ -31,6 +31,7 @@ const normalizeOrigin = (url) => url && url.replace(/\/$/, '');
 const allowedOrigins = [
   'http://localhost:3000',
   'https://agri-connect-y6ti.vercel.app',
+  'https://vercel.com/agri-connect-y6ti',
   normalizeOrigin(process.env.CLIENT_URL),
 ].filter(Boolean);
 
