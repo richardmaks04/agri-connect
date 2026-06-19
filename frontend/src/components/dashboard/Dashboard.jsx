@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { fetchFeed } from '../../store/slices/contentSlice';
 import ContentCard from '../shared/ContentCard';
+import QuickActionsPanel from '../shared/QuickActionsPanel';
+import { EmptyState } from '../shared/EmptyStates';
 
 const SPEC_EMOJIS = {
   cereal_crops: '🌽', poultry: '🐔', fisheries: '🐟', horticulture: '🥬', legumes: '🫘',
@@ -9,6 +12,7 @@ const SPEC_EMOJIS = {
 
 export default function Dashboard() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector(s => s.auth);
   const { feed, isLoading, isLoadingMore, pagination } = useSelector(s => s.content);
 
@@ -61,6 +65,9 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* Quick Actions Panel */}
+      <QuickActionsPanel />
+
       {/* Content Feed */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-800">
@@ -81,11 +88,15 @@ export default function Dashboard() {
           ))}
         </div>
       ) : feed.length === 0 ? (
-        <div className="card text-center py-12">
-          <p className="text-4xl mb-3">🌱</p>
-          <p className="text-gray-600 font-medium">No articles yet</p>
-          <p className="text-sm text-gray-400 mt-1">Check back soon — content is being added.</p>
-        </div>
+        <EmptyState
+          icon="🌱"
+          title="Your feed is ready!"
+          description="Articles matching your interests will appear here. Ask questions or explore trending topics in the Community."
+          actionLabel="Explore Community"
+          onAction={() => navigate('/community')}
+          gradient="from-primary-50 to-primary-100"
+          borderColor="border-primary-300"
+        />
       ) : (
         <>
           <div className="space-y-4">

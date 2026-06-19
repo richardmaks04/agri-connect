@@ -6,9 +6,10 @@ import { initOfflineSync } from './utils/offlineQueue';
 import api from './utils/api';
 
 // Shared components
-import Navbar          from './components/shared/Navbar';
-import ProtectedRoute  from './components/shared/ProtectedRoute';
-import OfflineBanner   from './components/shared/OfflineBanner';
+import Navbar              from './components/shared/Navbar';
+import ProtectedRoute      from './components/shared/ProtectedRoute';
+import OfflineBanner       from './components/shared/OfflineBanner';
+import FloatingActionButton from './components/shared/FloatingActionButton';
 
 // Pages
 import LoginPage        from './pages/LoginPage';
@@ -33,6 +34,7 @@ function AppLayout({ children }) {
       <main className="pt-2">
         {children}
       </main>
+      <FloatingActionButton />
     </div>
   );
 }

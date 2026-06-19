@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import api from '../../utils/api';
+import { EmptyStateNoQuestions } from '../shared/EmptyStates';
 
 const SPECS = [
   { value: '', label: 'All Topics' },
@@ -168,11 +169,7 @@ export default function CommunityPage() {
           ))}
         </div>
       ) : questions.length === 0 ? (
-        <div className="card text-center py-12">
-          <p className="text-4xl mb-3">🙋</p>
-          <p className="text-gray-600 font-medium">No questions yet in this category</p>
-          <p className="text-sm text-gray-400 mt-1">Be the first to ask!</p>
-        </div>
+        <EmptyStateNoQuestions />
       ) : (
         <div className="space-y-4">
           {questions.map(q => <QuestionCard key={q._id} q={q} />)}
