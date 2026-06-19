@@ -20,6 +20,7 @@ const communityRouter = express.Router();
 const communityController = require('../controllers/communityController');
 
 communityRouter.get('/questions', communityController.getQuestions);
+communityRouter.get('/questions/:id', communityController.getQuestion);
 communityRouter.post('/questions', protect, communityController.createQuestion);
 communityRouter.post('/questions/:id/answers', protect, communityController.postAnswer);
 communityRouter.post('/questions/:id/answers/:answerId/helpful', protect, communityController.markHelpful);

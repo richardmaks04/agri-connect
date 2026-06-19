@@ -24,6 +24,25 @@ exports.getQuestions = async (req, res, next) => {
   }
 };
 
+// ─── GET /api/community/questions/:id ────────────────────────────────────────
+exports.getQuestion = async (req, res, next) => {
+  try {
+    const question = await Question.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { views: 1 } },
+      { new: true }
+    ).populate('author', 'profile.fullName profile.avatar role');
+
+    if (!question) {
+      return res.status(404).json({ error: 'Question not found.' });
+    }
+
+    res.json({ question });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // ─── POST /api/community/questions ───────────────────────────────────────────
 exports.createQuestion = async (req, res, next) => {
   try {
