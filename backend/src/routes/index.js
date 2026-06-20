@@ -9,7 +9,7 @@ const contentRouter = express.Router();
 
 contentRouter.get('/', protect, contentController.getFeed);
 contentRouter.get('/:id', optionalAuth, contentController.getOne);
-contentRouter.post('/', protect, restrictTo('expert', 'extension', 'admin'), contentController.create);
+contentRouter.post('/', protect, contentController.create);
 contentRouter.post('/:id/save', protect, contentController.saveContent);
 contentRouter.post('/:id/like', protect, contentController.likeContent);
 

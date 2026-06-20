@@ -55,7 +55,7 @@ export default function Navbar() {
               ⚙️ Admin
             </Link>
           )}
-          {['expert', 'extension', 'admin'].includes(user?.role) && (
+          {user && (
             <Link to="/content/new"
               className="btn-primary text-sm py-1.5 px-3 ml-2">
               + Publish
@@ -107,7 +107,7 @@ export default function Navbar() {
             {link.label}
           </Link>
         ))}
-        {['expert', 'extension', 'admin'].includes(user?.role) && (
+        {user && (
           <Link to="/content/new"
             className={`flex-1 flex flex-col items-center justify-center py-2 text-xs gap-0.5 ${
               pathname.startsWith('/content/new') ? 'text-primary-600' : 'text-gray-500'

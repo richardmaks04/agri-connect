@@ -40,24 +40,22 @@ export default function Dashboard() {
             <p className="text-primary-100 text-sm mt-1">
               Your personalised farming feed is ready.
             </p>
-            {['expert', 'extension', 'admin'].includes(user?.role) && (
-              <div className="mt-4 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => navigate('/content/new')}
-                  className="btn-secondary text-sm"
-                >
-                  📝 Upload Article
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate('/community')}
-                  className="btn-primary text-sm"
-                >
-                  💬 Ask Question
-                </button>
-              </div>
-            )}
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => navigate('/content/new')}
+                className="btn-secondary text-sm w-full"
+              >
+                📝 Publish an Article
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/community')}
+                className="btn-primary text-sm w-full"
+              >
+                💬 Ask a Question
+              </button>
+            </div>
           </div>
           <div className="hidden sm:flex flex-col items-end text-right">
             <div className="bg-white/20 rounded-xl px-4 py-2">

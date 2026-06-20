@@ -17,17 +17,49 @@ exports.register = async (req, res, next) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, fullName, phoneNumber, primarySpecialization, state, lga, experience } = req.body;
+    const {
+      email, password, fullName, phoneNumber,
+      primarySpecialization, state, lga, experience,
+      role = 'farmer', inviteCode,
+    } = req.body;
 
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    const normalizedEmail = email.toLowerCase();
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return res.status(409).json({ error: 'An account with this email already exists.' });
     }
 
+    // If the user requests a privileged role, require a valid invite code
+    const privilegedRoles = ['expert', 'extension', 'admin'];
+    let isVerified = false;
+    let assignedRole = 'farmer';
+
+    if (role && privilegedRoles.includes(role)) {
+      const code = (inviteCode || '').trim();
+      if (!code) {
+        return res.status(403).json({ error: 'Invite code required for requested account type.' });
+      }
+
+      const ok = (
+        (role === 'admin' && process.env.ADMIN_SIGNUP_KEY && code === process.env.ADMIN_SIGNUP_KEY) ||
+        (role === 'expert' && process.env.EXPERT_SIGNUP_KEY && code === process.env.EXPERT_SIGNUP_KEY) ||
+        (role === 'extension' && process.env.EXTENSION_SIGNUP_KEY && code === process.env.EXTENSION_SIGNUP_KEY)
+      );
+
+      if (!ok) {
+        return res.status(403).json({ error: 'Invalid invite code for requested account type.' });
+      }
+
+      assignedRole = role;
+      isVerified = true; // Invite-based signups are treated as verified
+    }
+
     const user = await User.create({
-      email: email.toLowerCase(),
+      email: normalizedEmail,
       phoneNumber,
       passwordHash: password, // Will be hashed by pre-save hook in User model
+      role: assignedRole,
+      isVerified,
       profile: {
         fullName,
         location: { state, lga },

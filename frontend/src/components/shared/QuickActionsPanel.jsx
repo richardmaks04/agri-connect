@@ -37,28 +37,25 @@ export default function QuickActionsPanel() {
           </div>
         </div>
 
-        {/* Create Content CTA - Experts/Admins Only */}
-        {['expert', 'extension', 'admin'].includes(user?.role) && (
-          <div 
-            onClick={() => navigate('/content/new')}
-            className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-4 cursor-pointer hover:shadow-md transition-shadow group"
-          >
-            <div className="flex items-start gap-3">
-              <div className="text-3xl">📝</div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors">
-                  Create Article
-                </h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  Share your expertise by creating articles and guides for farmers.
-                </p>
-                <button className="mt-3 text-sm font-medium text-green-700 hover:text-green-900 flex items-center gap-1">
-                  Create Now →
-                </button>
-              </div>
+        <div 
+          onClick={() => navigate('/content/new')}
+          className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-4 cursor-pointer hover:shadow-md transition-shadow group"
+        >
+          <div className="flex items-start gap-3">
+            <div className="text-3xl">📝</div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors">
+                Create Article
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Share your knowledge by publishing articles for the community.
+              </p>
+              <button className="mt-3 text-sm font-medium text-green-700 hover:text-green-900 flex items-center gap-1">
+                Create Now →
+              </button>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Saved Articles */}
         <Link 

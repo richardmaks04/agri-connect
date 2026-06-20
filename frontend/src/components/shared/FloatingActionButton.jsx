@@ -32,7 +32,7 @@ export default function FloatingActionButton() {
         navigate('/content/new');
         setOpen(false);
       },
-      show: ['expert', 'extension', 'admin'].includes(user?.role),
+      show: true,
     },
     {
       id: 'search',

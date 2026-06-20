@@ -24,6 +24,7 @@ export default function RegisterPage() {
   const [form, setForm] = useState({
     fullName: '', email: '', password: '', confirmPassword: '',
     state: '', lga: '', primarySpecialization: '', experience: 'beginner',
+    role: 'farmer', inviteCode: '',
   });
   const [validationError, setValidationError] = useState('');
 
@@ -126,6 +127,24 @@ export default function RegisterPage() {
                   autoComplete="new-password"
                   onChange={e => set('confirmPassword', e.target.value)} />
               </div>
+              {/* Role selection for expert/extension/admin (invite-code protected) */}
+              <div>
+                <label className="label">Account Type</label>
+                <select className="input" value={form.role} onChange={e => set('role', e.target.value)}>
+                  <option value="farmer">Farmer</option>
+                  <option value="expert">Expert</option>
+                  <option value="extension">Extension Officer</option>
+                  <option value="admin">Administrator</option>
+                </select>
+              </div>
+
+              {form.role !== 'farmer' && (
+                <div>
+                  <label className="label">Invite Code</label>
+                  <input className="input" placeholder="Enter invite code provided by admin" value={form.inviteCode}
+                    onChange={e => set('inviteCode', e.target.value)} />
+                </div>
+              )}
               <button onClick={nextStep} className="btn-primary w-full py-3 text-base mt-2">
                 Continue →
               </button>
