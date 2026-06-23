@@ -43,7 +43,13 @@ export default function Dashboard() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <button
                 type="button"
-                onClick={() => navigate('/content/new')}
+                onClick={() => {
+                  console.log('[Publish Article] Dashboard CTA clicked', {
+                    userRole: user?.role,
+                    target: '/content/new',
+                  });
+                  navigate('/content/new');
+                }}
                 className="btn-secondary text-sm w-full"
               >
                 📝 Publish an Article

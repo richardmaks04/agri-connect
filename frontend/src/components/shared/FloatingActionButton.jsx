@@ -29,6 +29,10 @@ export default function FloatingActionButton() {
       label: 'Create Article',
       icon: '📝',
       action: () => {
+        console.log('[Publish Article] FAB create clicked', {
+          userRole: user?.role,
+          target: '/content/new',
+        });
         navigate('/content/new');
         setOpen(false);
       },

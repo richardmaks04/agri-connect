@@ -44,9 +44,34 @@ export default function CreateContent() {
   const handleSubmit = async (e) => {
     if (e?.preventDefault) e.preventDefault();
     if (!form.title || !form.content) return;
+    console.log('[Publish Article] Submit triggered', {
+      title: form.title,
+      contentType: form.contentType,
+      titleLength: form.title.length,
+      contentLength: form.content.length,
+      specializations: form.specializations,
+      topics: form.topics,
+      tags: form.tags,
+    });
     setSubmitting(true);
     setError('');
     try {
+      console.log('[Publish Article] Posting payload', {
+        endpoint: '/content',
+        payload: {
+          title: form.title,
+          summary: form.summary,
+          contentType: form.contentType,
+          tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
+          metadata: {
+            farmingSpecializations: form.specializations,
+            topics: form.topics,
+            difficulty: form.difficulty,
+            regions: form.regions,
+            seasons: form.seasons,
+          },
+        },
+      });
       await api.post('/content', {
         title:       form.title,
         summary:     form.summary,
@@ -61,13 +86,26 @@ export default function CreateContent() {
           seasons:    form.seasons,
         },
       });
+      console.log('[Publish Article] Submit succeeded');
       setSuccess(true);
       setTimeout(() => navigate('/dashboard'), 2000);
     } catch (err) {
+      console.error('[Publish Article] Submit failed', {
+        message: err?.message,
+        status: err.response?.status,
+        data: err.response?.data,
+      });
       setError(err.response?.data?.error || 'Failed to submit content. Please try again.');
     }
     setSubmitting(false);
   };
+
+  console.log('[Publish Article] CreateContent rendered', {
+    submitting,
+    success,
+    hasError: Boolean(error),
+    userCanSubmit: Boolean(form.title && form.content),
+  });
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 pb-20 md:pb-6">

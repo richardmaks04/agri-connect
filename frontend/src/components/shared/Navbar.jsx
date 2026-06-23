@@ -56,7 +56,14 @@ export default function Navbar() {
             </Link>
           )}
           {user && (
-            <Link to="/content/new"
+            <Link
+              to="/content/new"
+              onClick={() => {
+                console.log('[Publish Article] Navbar publish clicked', {
+                  userRole: user?.role,
+                  target: '/content/new',
+                });
+              }}
               className="btn-primary text-sm py-1.5 px-3 ml-2">
               + Publish
             </Link>
@@ -108,7 +115,14 @@ export default function Navbar() {
           </Link>
         ))}
         {user && (
-          <Link to="/content/new"
+          <Link
+            to="/content/new"
+            onClick={() => {
+              console.log('[Publish Article] Mobile navbar publish clicked', {
+                userRole: user?.role,
+                target: '/content/new',
+              });
+            }}
             className={`flex-1 flex flex-col items-center justify-center py-2 text-xs gap-0.5 ${
               pathname.startsWith('/content/new') ? 'text-primary-600' : 'text-gray-500'
             }`}>
