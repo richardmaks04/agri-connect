@@ -1,0 +1,377 @@
+[
+  {
+    "title": "Choosing the Right Maize Variety for Your Zone",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should cover how to select a maize variety based on agro-ecological zone, days to maturity, and disease resistance. Replace this text with real content sourced from an authoritative reference (e.g. IITA, FAO, or a state ADP extension guide) before going live.",
+    "metadata": {
+      "farmingSpecialisations": ["cereal_crops"],
+      "crops": ["maize"],
+      "topics": ["variety_selection", "planting"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season", "late_season"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Fertiliser Timing for Upland Rice Production",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should explain NPK and urea application timing across the rice growth cycle. Replace with verified agronomic guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["cereal_crops"],
+      "crops": ["rice"],
+      "topics": ["soil_fertility", "fertiliser_application"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Identifying and Managing Fall Armyworm in Maize",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should describe Fall Armyworm identification at the whorl stage and early-intervention pest management options. Replace with verified extension-service guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["cereal_crops"],
+      "crops": ["maize"],
+      "topics": ["pest_management"],
+      "regions": ["southwest_nigeria", "north_central"],
+      "seasons": ["early_season", "late_season"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Post-Harvest Storage Basics for Cereal Grains",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should cover drying thresholds, storage pest prevention, and basic hermetic bag use for maize and rice. Replace with verified post-harvest handling guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["cereal_crops"],
+      "crops": ["maize", "rice"],
+      "topics": ["post_harvest", "storage"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["harvest"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Reading the Signs: Common Nutrient Deficiencies in Cereal Crops",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should describe visual symptoms of nitrogen, phosphorus, and potassium deficiency in maize and rice leaves. Replace with verified agronomic reference content before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["cereal_crops"],
+      "crops": ["maize", "rice"],
+      "topics": ["soil_fertility", "crop_health"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season", "late_season"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Setting Up a Low-Cost Backyard Poultry Pen",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should walk through basic pen construction, ventilation, and stocking density for a smallholder broiler or layer setup. Replace with verified livestock housing guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["poultry"],
+      "crops": ["broiler", "layer"],
+      "topics": ["housing", "farm_setup"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Feed Ration Basics for Small-Scale Broiler Production",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should explain how to balance a feed ration by flock age and growth target using locally available ingredients. Replace with verified feed formulation guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["poultry"],
+      "crops": ["broiler"],
+      "topics": ["feed_management"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Newcastle Disease: Prevention and Vaccination Schedule",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should outline Newcastle Disease symptoms, the standard vaccination schedule for smallholder flocks, and biosecurity basics. Replace with verified veterinary guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["poultry"],
+      "crops": ["layer", "broiler"],
+      "topics": ["disease_management", "vaccination"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Improving Egg Production Through Lighting and Nutrition",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should cover lighting schedules and calcium-rich feed adjustments to improve layer productivity. Replace with verified poultry science content before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["poultry"],
+      "crops": ["layer"],
+      "topics": ["feed_management", "productivity"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Recordkeeping for Small Poultry Enterprises",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should introduce simple recordkeeping templates for tracking feed cost, mortality, and egg/meat yield over time. Replace with verified farm-business guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["poultry"],
+      "crops": ["broiler", "layer"],
+      "topics": ["farm_management", "record_keeping"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Pond Construction Basics for Catfish Farming",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should cover earthen and concrete pond sizing, water depth, and drainage considerations for smallholder catfish production. Replace with verified aquaculture extension guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["fisheries"],
+      "crops": ["catfish"],
+      "topics": ["farm_setup", "pond_management"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Water Quality Management for Catfish Ponds",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should explain dissolved oxygen, ammonia, and pH monitoring basics and low-cost water-quality correction methods. Replace with verified aquaculture science content before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["fisheries"],
+      "crops": ["catfish", "tilapia"],
+      "topics": ["pond_management", "water_quality"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Feeding Schedules and Growth Stages in Tilapia Farming",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should detail feed type and frequency across tilapia growth stages from fingerling to harvest size. Replace with verified feed-management guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["fisheries"],
+      "crops": ["tilapia"],
+      "topics": ["feed_management", "productivity"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Common Fish Diseases and Early Warning Signs",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should describe common signs of disease and parasite outbreaks in pond-raised catfish and tilapia, with first-response steps. Replace with verified veterinary/aquaculture guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["fisheries"],
+      "crops": ["catfish", "tilapia"],
+      "topics": ["disease_management"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Harvesting and Post-Harvest Handling of Pond Fish",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should cover harvest timing, handling to reduce stress and spoilage, and basic on-farm storage or transport options before sale. Replace with verified post-harvest guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["fisheries"],
+      "crops": ["catfish", "tilapia"],
+      "topics": ["post_harvest", "storage"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["harvest"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Raised Bed Preparation for Tomato and Pepper",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should explain raised bed construction, spacing, and soil amendment basics for tomato and pepper transplanting. Replace with verified horticultural extension guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["vegetables"],
+      "crops": ["tomato", "pepper"],
+      "topics": ["farm_setup", "planting"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season", "dry_season"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Managing Blight and Common Fungal Diseases in Tomatoes",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should describe early and late blight symptoms in tomato and basic fungicide-rotation or cultural control practices. Replace with verified plant-pathology guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["vegetables"],
+      "crops": ["tomato"],
+      "topics": ["disease_management"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season", "late_season"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Drip Irrigation Basics for Dry-Season Vegetable Production",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should introduce low-cost drip irrigation setup for extending vegetable production into the dry season. Replace with verified irrigation engineering guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["vegetables"],
+      "crops": ["tomato", "pepper", "leafy_greens"],
+      "topics": ["irrigation", "water_management"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["dry_season"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Pest Scouting Routine for Leafy Vegetable Farms",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should describe a simple weekly scouting routine to catch aphid and caterpillar infestations early in leafy vegetable plots. Replace with verified IPM (Integrated Pest Management) guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["vegetables"],
+      "crops": ["leafy_greens"],
+      "topics": ["pest_management"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["year_round"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Reaching Urban Markets: Quality Grading for Fresh Vegetables",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should explain basic grading and packaging standards that improve acceptance and pricing in urban vegetable markets. Replace with verified post-harvest marketing guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["vegetables"],
+      "crops": ["tomato", "pepper", "leafy_greens"],
+      "topics": ["post_harvest", "marketing"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["harvest"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Seed Selection and Inoculation for Cowpea Production",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should cover certified seed selection and rhizobium inoculation basics to improve cowpea nitrogen fixation and yield. Replace with verified legume agronomy guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["legumes"],
+      "crops": ["cowpea"],
+      "topics": ["variety_selection", "planting"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Managing Pod Borer and Aphid Pressure in Cowpea",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should describe identification and management of pod borer and aphid infestations that commonly affect Nigerian cowpea fields. Replace with verified pest management guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["legumes"],
+      "crops": ["cowpea"],
+      "topics": ["pest_management"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season", "late_season"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Soybean Row Spacing and Planting Density Guide",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should explain recommended row spacing and seeding density for soybean to balance yield and input cost. Replace with verified agronomic guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["legumes"],
+      "crops": ["soybean"],
+      "topics": ["planting"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Drying and Storage Tips to Prevent Weevil Damage in Legumes",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should cover proper drying moisture targets and hermetic storage options to prevent post-harvest weevil damage in cowpea and soybean. Replace with verified post-harvest handling guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["legumes"],
+      "crops": ["cowpea", "soybean"],
+      "topics": ["post_harvest", "storage"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["harvest"],
+      "difficulty": "beginner"
+    },
+    "media": [],
+    "status": "published"
+  },
+  {
+    "title": "Rotating Legumes with Cereals to Improve Soil Fertility",
+    "contentType": "article",
+    "content": "[PLACEHOLDER BODY] This article should explain how rotating cowpea or soybean with maize improves soil nitrogen and breaks pest cycles. Replace with verified soil-science guidance before publishing.",
+    "metadata": {
+      "farmingSpecialisations": ["legumes"],
+      "crops": ["cowpea", "soybean"],
+      "topics": ["soil_fertility", "crop_rotation"],
+      "regions": ["southwest_nigeria"],
+      "seasons": ["early_season", "late_season"],
+      "difficulty": "intermediate"
+    },
+    "media": [],
+    "status": "published"
+  }
+]
