@@ -18,6 +18,7 @@ export default function CreateContent() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess]       = useState(false);
+  const [error, setError]           = useState('');
   const [form, setForm] = useState({
     title:        '',
     summary:      '',
@@ -41,9 +42,10 @@ export default function CreateContent() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e?.preventDefault) e.preventDefault();
     if (!form.title || !form.content) return;
     setSubmitting(true);
+    setError('');
     try {
       await api.post('/content', {
         title:       form.title,
@@ -61,7 +63,9 @@ export default function CreateContent() {
       });
       setSuccess(true);
       setTimeout(() => navigate('/dashboard'), 2000);
-    } catch (_) {}
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to submit content. Please try again.');
+    }
     setSubmitting(false);
   };
 
@@ -75,6 +79,12 @@ export default function CreateContent() {
       {success && (
         <div className="bg-green-50 border border-green-200 text-green-700 rounded-xl px-4 py-3 mb-5 text-sm">
           ✅ Content submitted! It will be reviewed and published shortly.
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 mb-5 text-sm">
+          {error}
         </div>
       )}
 

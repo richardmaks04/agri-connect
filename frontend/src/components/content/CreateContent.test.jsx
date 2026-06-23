@@ -11,7 +11,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import CreateContent from '../components/content/CreateContent';
-import * as api from '../utils/api';
+import * as api from '../../utils/api';
 
 // Mock dependencies
 jest.mock('react-router-dom', () => ({
@@ -19,7 +19,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => jest.fn(),
 }));
 
-jest.mock('../utils/api');
+jest.mock('../../utils/api');
 
 const mockStore = {
   getState: () => ({
