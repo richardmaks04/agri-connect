@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { goToCreateArticlePage } from '../../utils/articleNavigation';
 
 /**
  * Floating Action Button (FAB)
@@ -29,11 +30,7 @@ export default function FloatingActionButton() {
       label: 'Create Article',
       icon: '📝',
       action: () => {
-        console.log('[Publish Article] FAB create clicked', {
-          userRole: user?.role,
-          target: '/content/new',
-        });
-        navigate('/content/new');
+        goToCreateArticlePage(navigate, 'fab-create', { userRole: user?.role });
         setOpen(false);
       },
       show: true,

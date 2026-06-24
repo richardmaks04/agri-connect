@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../store/slices/authSlice';
+import { goToCreateArticlePage } from '../../utils/articleNavigation';
 
 const NAV_LINKS = [
   { to: '/dashboard',  label: 'Home',      icon: '🏠' },
@@ -58,12 +59,7 @@ export default function Navbar() {
           {user && (
             <Link
               to="/content/new"
-              onClick={() => {
-                console.log('[Publish Article] Navbar publish clicked', {
-                  userRole: user?.role,
-                  target: '/content/new',
-                });
-              }}
+              onClick={() => goToCreateArticlePage(navigate, 'navbar-desktop', { userRole: user?.role })}
               className="btn-primary text-sm py-1.5 px-3 ml-2">
               + Publish
             </Link>
@@ -117,12 +113,7 @@ export default function Navbar() {
         {user && (
           <Link
             to="/content/new"
-            onClick={() => {
-              console.log('[Publish Article] Mobile navbar publish clicked', {
-                userRole: user?.role,
-                target: '/content/new',
-              });
-            }}
+            onClick={() => goToCreateArticlePage(navigate, 'navbar-mobile', { userRole: user?.role })}
             className={`flex-1 flex flex-col items-center justify-center py-2 text-xs gap-0.5 ${
               pathname.startsWith('/content/new') ? 'text-primary-600' : 'text-gray-500'
             }`}>

@@ -72,7 +72,7 @@ export default function App() {
         } />
 
         <Route path="/content/new" element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={['expert', 'extension', 'admin']}>
             <AppLayout><CreateContent /></AppLayout>
           </ProtectedRoute>
         } />

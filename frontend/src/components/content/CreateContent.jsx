@@ -116,7 +116,7 @@ export default function CreateContent() {
 
       {success && (
         <div className="bg-green-50 border border-green-200 text-green-700 rounded-xl px-4 py-3 mb-5 text-sm">
-          ✅ Content submitted! It will be reviewed and published shortly.
+          ✅ Content published successfully.
         </div>
       )}
 
@@ -223,7 +223,7 @@ export default function CreateContent() {
 
         <button type="submit" disabled={submitting || !form.title || !form.content}
           className="btn-primary w-full py-3 text-base">
-          {submitting ? 'Submitting…' : '🚀 Submit for Review'}
+          {submitting ? 'Publishing…' : '🚀 Publish Article'}
         </button>
       </form>
     </div>

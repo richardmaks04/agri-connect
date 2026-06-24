@@ -59,6 +59,8 @@ exports.getOne = async (req, res, next) => {
 exports.create = async (req, res, next) => {
   try {
     const { title, content, summary, contentType, metadata, tags } = req.body;
+    const canPublishImmediately = ['expert', 'extension', 'admin'].includes(req.user.role);
+    const status = canPublishImmediately ? 'published' : 'pending';
 
     const newContent = await Content.create({
       title,
@@ -72,18 +74,19 @@ exports.create = async (req, res, next) => {
       },
       metadata,
       tags,
-      status: req.user.role === 'admin' ? 'published' : 'pending',
+      status,
     });
 
-    if (req.user.role === 'admin') {
+    if (canPublishImmediately) {
       newContent.publishedAt = new Date();
       await newContent.save();
     }
 
     res.status(201).json({
-      message: req.user.role === 'admin'
+      message: canPublishImmediately
         ? 'Content published successfully.'
         : 'Content submitted for review.',
+      data: newContent,
       content: newContent,
     });
   } catch (error) {

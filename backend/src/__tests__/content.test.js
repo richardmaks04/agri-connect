@@ -77,7 +77,8 @@ describe('Content Creation API Tests', () => {
 
       expect(response.body.data).toHaveProperty('_id');
       expect(response.body.data.title).toBe(contentData.title);
-      expect(response.body.data.status).toBe('pending');
+      expect(response.body.data.status).toBe('published');
+      expect(response.body.data.publishedAt).toBeDefined();
       expect(response.body.data.author.userId).toEqual(userId);
 
       // Verify content saved to database

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchFeed } from '../../store/slices/contentSlice';
+import { goToCreateArticlePage } from '../../utils/articleNavigation';
 import ContentCard from '../shared/ContentCard';
 import QuickActionsPanel from '../shared/QuickActionsPanel';
 import { EmptyState } from '../shared/EmptyStates';
@@ -43,13 +44,7 @@ export default function Dashboard() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <button
                 type="button"
-                onClick={() => {
-                  console.log('[Publish Article] Dashboard CTA clicked', {
-                    userRole: user?.role,
-                    target: '/content/new',
-                  });
-                  navigate('/content/new');
-                }}
+                onClick={() => goToCreateArticlePage(navigate, 'dashboard-cta', { userRole: user?.role })}
                 className="btn-secondary text-sm w-full"
               >
                 📝 Publish an Article
